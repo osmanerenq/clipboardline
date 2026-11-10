@@ -3065,12 +3065,24 @@ pub fn run() {
 
             trigger_image_search_refresh(app.handle());
 
-            if let Some(initial_act) = parse_cli_linux_action(&argv) {
-                let app_act = app.handle().clone();
-                tauri::async_runtime::spawn(async move {
-                    handle_global_action(&app_act, initial_act).await;
-                });
-            }
+            let initial_act = parse_cli_linux_action(&argv);
+            let app_act = app.handle().clone();
+            tauri::async_runtime::spawn(async move {
+                match initial_act {
+                    Some("screenshot") | Some("copyLatest") => {
+                        handle_global_action(&app_act, initial_act.unwrap()).await;
+                    }
+                    Some("library") => {
+                        show_view(&app_act, "library", None).await;
+                    }
+                    Some("search") => {
+                        show_view(&app_act, "shelves", Some(json!({ "search": true }))).await;
+                    }
+                    _ => {
+                        show_view(&app_act, "shelves", None).await;
+                    }
+                }
+            });
 
             Ok(())
         })

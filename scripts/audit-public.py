@@ -9,7 +9,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-IGNORED = {'.git', '.build', 'build', 'dist', 'node_modules', 'local', '.cache', '__pycache__'}
+IGNORED = {'.git', '.build', 'build', 'dist', 'node_modules', 'target', 'local', '.cache', '__pycache__'}
 PRIVATE_NAMES = {'.env', 'profile.json', 'keychain-password', 'recovery-password',
                  'preferences.plist', 'history.json', 'text-history.json', 'install-job.json'}
 PRIVATE_PARTS = {'signing', 'rollback', 'backups', 'attachments', 'legacy-2026-10-09'}

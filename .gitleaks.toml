@@ -4,7 +4,7 @@ useDefault = true
 
 [[allowlists]]
 description = "Ignored build caches; audit-public.py separately forbids tracking these paths"
-paths = ['''^(\.git|\.build|build|dist|node_modules|local|test-results|playwright-report)/''']
+paths = ['''^((\.git|\.build|build|dist|node_modules|target|local|test-results|playwright-report)/|(windows|linux)/(node_modules|target|dist|build)/)''']
 
 # Exact public verification key and pinned upstream source revisions. These
 # cannot sign an update or authenticate a client. No credential-shaped wildcard

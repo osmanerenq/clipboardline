@@ -13,7 +13,8 @@
     "test:electron": "node tests/electron-smoke.cjs",
     "dist": "electron-builder --win nsis --x64 --publish never",
     "dist:linux": "electron-builder --linux AppImage deb rpm --x64 --publish never -c.extraMetadata.homepage=https://github.com/orkunisitmak/clipboardline",
-    "test:linux": "node tests/linux-runtime-acceptance.cjs"
+    "test:linux": "node tests/linux-runtime-acceptance.cjs",
+    "tauri": "npm --prefix ../linux run tauri"
   },
   "dependencies": {
     "@tesseract.js-data/eng": "1.0.0",

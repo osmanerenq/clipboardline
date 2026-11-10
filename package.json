@@ -1,0 +1,10 @@
+{
+  "name": "clipboardline-root",
+  "version": "1.7.8",
+  "private": true,
+  "scripts": {
+    "tauri": "npm --prefix linux run tauri",
+    "dev": "npm --prefix linux run dev",
+    "build": "npm --prefix linux run build"
+  }
+}

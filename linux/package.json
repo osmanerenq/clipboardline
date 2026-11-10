@@ -1,0 +1,14 @@
+{
+  "name": "clipboardline-linux",
+  "version": "1.7.8",
+  "description": "Keyboard-first local clipboard shelves and saved library for Linux (Tauri port)",
+  "private": true,
+  "scripts": {
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.5.0"
+  }
+}
