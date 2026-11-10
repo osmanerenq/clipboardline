@@ -1,0 +1,43 @@
+[package]
+name = "clipboardline-linux"
+version = "1.7.8"
+description = "Keyboard-first local clipboard shelves and saved library for Linux (Tauri port)"
+authors = ["ClipBoardLine contributors"]
+license = "MIT"
+repository = "https://github.com/orkunisitmak/clipboardline"
+edition = "2021"
+default-run = "clipboardline"
+
+[[bin]]
+name = "clipboardline"
+path = "src/main.rs"
+
+[lib]
+name = "clipboardline_linux"
+path = "src/lib.rs"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon", "image-png"] }
+tauri-plugin-global-shortcut = "2"
+tauri-plugin-single-instance = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+sha2 = "0.10"
+hex = "0.4"
+uuid = { version = "1", features = ["v4"] }
+base64 = "0.22"
+url = "2"
+regex = "1"
+unicode-normalization = "0.1"
+unicode-segmentation = "1"
+encoding_rs = "0.8"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp", "bmp"] }
+notify = "6"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "http2"] }
+tract-onnx = "0.21"
+rand = "0.8"
+libc = "0.2"

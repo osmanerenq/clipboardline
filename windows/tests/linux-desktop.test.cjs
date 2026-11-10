@@ -47,11 +47,20 @@ test('autostart writes an owned XDG entry, quotes paths and never replaces a for
   assert.equal(fs.readFileSync(file,'utf8'),'[Desktop Entry]\nExec=someone-else\n');
   fs.unlinkSync(file);fs.symlinkSync(path.join(root,'elsewhere'),file);assert.throws(()=>setAutostart(true,{env,command:['/x']}),/regular file/);
   assert.equal(fs.readdirSync(path.dirname(file)).length,1,'no temporary entry is left behind');
+  const symlinkEnv={XDG_CONFIG_HOME:path.join(root,'symlink-config'),HOME:root};
+  fs.mkdirSync(symlinkEnv.XDG_CONFIG_HOME,{recursive:true});
+  const realTarget=path.join(root,'real-autostart');fs.mkdirSync(realTarget,{recursive:true});
+  fs.symlinkSync(realTarget,path.join(symlinkEnv.XDG_CONFIG_HOME,'autostart'));
+  assert.throws(()=>setAutostart(true,{env:symlinkEnv,command:['/x']}),/regular directory/);
+  assert.match(autostartEntry({command:['/opt/ClipBoardLine/clipboardline'],name:'ClipBoardLine\0\x1fTest'}),/\nName=ClipBoardLine  Test\n/);
 });
 test('link exports use each operating system native link file type',()=>{
   assert.deepEqual(linkFile('https://example.com/a?b=1',{platform:'win32'}),{extension:'.url',bytes:'[InternetShortcut]\r\nURL=https://example.com/a?b=1\r\n'});
   assert.deepEqual(linkFile('https://example.com/a?b=1',{platform:'linux'}),{extension:'.desktop',bytes:'[Desktop Entry]\nType=Link\nName=example.com\nURL=https://example.com/a?b=1\nIcon=text-html\n'});
   assert.throws(()=>linkFile('https://example.com/\nExec=x',{platform:'linux'}),/Invalid link/);
+  assert.throws(()=>linkFile('javascript:alert(1)',{platform:'linux'}),/Invalid link/);
+  assert.throws(()=>linkFile('file:///etc/passwd',{platform:'win32'}),/Invalid link/);
+  assert.throws(()=>linkFile('https://example.com/\x07bell',{platform:'linux'}),/Invalid link/);
   assert.match(linkFile('https://example.com/?q=a\\nb',{platform:'linux'}).bytes,/^URL=https:\/\/example\.com\/\?q=a\\\\nb$/m,'a backslash in the URL stays a backslash, not a newline');
   assert.equal(linkFile('https://example.com/?q=a\\nb',{platform:'win32'}).bytes,'[InternetShortcut]\r\nURL=https://example.com/?q=a\\nb\r\n','Windows .url bytes are unchanged');
 });

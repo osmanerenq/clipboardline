@@ -17,7 +17,7 @@ function execArgument(value){
 }
 function autostartEntry({command,name='ClipBoardLine'}){
  if(!Array.isArray(command)||!command.length)throw new Error('Invalid autostart command.');
- return['[Desktop Entry]','Type=Application','Name='+name.replace(/[\r\n]/g,' '),'Comment=Keyboard-first clipboard shelves','Exec='+command.map(execArgument).join(' '),'Icon=clipboardline','Terminal=false','X-GNOME-Autostart-enabled=true',OWNER,''].join('\n');
+ return['[Desktop Entry]','Type=Application','Name='+name.replace(/[\x00-\x1f\x7f]/g,' '),'Comment=Keyboard-first clipboard shelves','Exec='+command.map(execArgument).join(' '),'Icon=clipboardline','Terminal=false','X-GNOME-Autostart-enabled=true',OWNER,''].join('\n');
 }
 function setAutostart(enabled,{command,env=process.env,name}={}){
  const file=autostartFile(env),directory=path.dirname(file);
@@ -27,6 +27,8 @@ function setAutostart(enabled,{command,env=process.env,name}={}){
  if(existing&&!fs.readFileSync(file,'utf8').includes(OWNER))throw new Error('Another autostart entry named '+NAME+' already exists.');
  if(!enabled){if(existing)fs.unlinkSync(file);return false;}
  fs.mkdirSync(directory,{recursive:true,mode:0o700});
+ const dirStat=fs.lstatSync(directory);
+ if(!dirStat.isDirectory()||dirStat.isSymbolicLink())throw new Error('The autostart directory is not a regular directory.');
  const temporary=path.join(directory,'.'+NAME+'.'+crypto.randomUUID());
  try{fs.writeFileSync(temporary,autostartEntry({command,name}),{flag:'wx',mode:0o644});fs.renameSync(temporary,file);}
  finally{try{fs.unlinkSync(temporary);}catch{}}
